@@ -1,16 +1,21 @@
-import os
 from os import sep
 from bs4 import BeautifulSoup
 
 
+# Принимает поисковой запрос и файл с субтитрами
+# Принтит таймкоды найденных по запросу слов
+# С ТОЧНОСТЬЮ ДО МИЛЛИСЕКУНДЫ
+# Может быть полезно при автоматическом видеомонтаже
+# Недостаток: ищет только по автоматически сгенерированым субтитрам
+# На данный момет не используется
 def search_query(search_words, file):
     video_id = file.split(sep)[-1].split('.')[0]
-    yt_link = f"https://www.youtube.com/watch?v={video_id}&t="
+    yt_link = f'https://www.youtube.com/watch?v={video_id}&t='
 
     all_words = []
     all_times = []
 
-    with open(file, encoding="utf-8") as f:
+    with open(file, encoding='utf-8') as f:
         soup = BeautifulSoup(f, 'html.parser')
 
         paragraphes = soup.find_all('p')
