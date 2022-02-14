@@ -1,15 +1,17 @@
-# import OS module
 import os
 from bs4 import BeautifulSoup
 
+# Тут внимательно! Следить руками:
+# что бы video_id в yt_link совпадало с video_id первого файла в директории path
+yt_link = "https://www.youtube.com/watch?v=0TJLkZZd_ds&t="
+search_words = "вами"
+
 # Get the list of all files and directories
 path = "./subs/"
-
 dir_list = os.listdir(path)
 
 all_words = []
 all_times = []
-words_list = []
 
 for file in dir_list[:1]:
     with open(path+file) as f:
@@ -24,42 +26,25 @@ for file in dir_list[:1]:
                 continue
 
             for word in words:
-
                 w_time = paragraph.get('t')
                 w_time = w_time if not None else p_time
 
-                words_list.append(w_time + ':' + word.text.strip())
                 all_words.append(word.text.strip())
                 all_times.append(w_time)
 
-all_text = ' '.join(all_words)
-# print(all_text)
-# print(all_times)
-# print(words_list)
-
-tt = {}
-s = ''
+timeByWordIndex = {}
+string_of_all_words = ''
 for idx, word in enumerate(all_words):
-    s += word + ' '
-    tt[len(s)] = all_times[idx]
-
-# print(s)
-# print(tt)
-
-# s1 = "вот такую штуку"
-s1 = "вот так"
+    string_of_all_words += word + ' '
+    timeByWordIndex[len(string_of_all_words)] = all_times[idx]
 
 res = -1
 answers = []
 while True:
-    res = s.find(s1, res+1)
+    res = string_of_all_words.find(search_words, res + 1)
     if res == -1:
         break
-    answers.append(tt[res])
+    answers.append(timeByWordIndex[res])
 
-# print(res)
-# print(tt[res])
-print(answers)
-yt_link = "https://www.youtube.com/watch?v=prPeDmN4JnU&t="
 for timems in answers:
     print(yt_link + timems + 'ms')
