@@ -13,8 +13,11 @@ dir_list = os.listdir(path)
 all_words = []
 all_times = []
 
+# код ниже ищет заданные search_words
+# ТОЛЬКО в автоматически сгенерированных субтитрах
+# и ТОЛЬКО в первом файле директории subs
 for file in dir_list[:1]:
-    with open(path+file) as f:
+    with open(path+file, encoding="utf-8") as f:
         soup = BeautifulSoup(f, 'html.parser')
 
         paragraphes = soup.find_all('p')
@@ -44,7 +47,8 @@ while True:
     res = string_of_all_words.find(search_words, res + 1)
     if res == -1:
         break
-    answers.append(timeByWordIndex[res])
+    index = string_of_all_words[:res].rfind(' ') + 1
+    answers.append(timeByWordIndex[index])
 
 for timems in answers:
     print(yt_link + timems + 'ms')
