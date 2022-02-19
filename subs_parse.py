@@ -1,65 +1,63 @@
-# import OS module
-import os
+from os import sep
 from bs4 import BeautifulSoup
 
-# Get the list of all files and directories
-path = "./subs/"
 
-dir_list = os.listdir(path)
+# Принимает поисковой запрос и файл с субтитрами
+# Принтит таймкоды найденных по запросу слов
+# С ТОЧНОСТЬЮ ДО МИЛЛИСЕКУНДЫ
+# Может быть полезно при автоматическом видеомонтаже
+# Недостаток: ищет только по автоматически сгенерированым субтитрам
+# На данный момет не используется
+def search_query(search_words, file):
+    video_id = file.split(sep)[-1].split('.')[0]
+    yt_link = f'https://www.youtube.com/watch?v={video_id}&t='
 
-all_words = []
-all_times = []
-words_list = []
+    all_words = []
+    all_times = []
 
-for file in dir_list[:1]:
-    with open(path+file) as f:
+    with open(file, encoding='utf-8') as f:
         soup = BeautifulSoup(f, 'html.parser')
 
         paragraphes = soup.find_all('p')
         for paragraph in paragraphes:
-            p_time = paragraph.get('t')
+            p_time = int(paragraph.get('t'))
 
             words = paragraph.find_all('s')
             if not words:
                 continue
 
             for word in words:
+                w_time = word.get('t')
+                if w_time is None:
+                    w_time = 0
+                else:
+                    w_time = int(w_time)
 
-                w_time = paragraph.get('t')
-                w_time = w_time if not None else p_time
-
-                words_list.append(w_time + ':' + word.text.strip())
                 all_words.append(word.text.strip())
-                all_times.append(w_time)
+                all_times.append(w_time + p_time)
 
-all_text = ' '.join(all_words)
-# print(all_text)
-# print(all_times)
-# print(words_list)
+    timeByWordIndex = {}
+    string_of_all_words = ''
+    for idx, word in enumerate(all_words):
+        timeByWordIndex[len(string_of_all_words)] = all_times[idx]
+        string_of_all_words += word + ' '
 
-tt = {}
-s = ''
-for idx, word in enumerate(all_words):
-    s += word + ' '
-    tt[len(s)] = all_times[idx]
+    res = -1
+    answers = []
+    while True:
+        res = string_of_all_words.find(search_words, res + 1)
+        if res == -1:
+            break
+        index = string_of_all_words[:res].rfind(' ') + 1
+        answers.append(timeByWordIndex[index])
 
-# print(s)
-# print(tt)
+    for timems in answers:
+        print(yt_link + str(timems) + 'ms')
 
-# s1 = "вот такую штуку"
-s1 = "вот так"
 
-res = -1
-answers = []
-while True:
-    res = s.find(s1, res+1)
-    if res == -1:
-        break
-    answers.append(tt[res])
+def main(query, file):
+    search_query(query, file)
 
-# print(res)
-# print(tt[res])
-print(answers)
-yt_link = "https://www.youtube.com/watch?v=prPeDmN4JnU&t="
-for timems in answers:
-    print(yt_link + timems + 'ms')
+
+if __name__ == '__main__':
+    main()
