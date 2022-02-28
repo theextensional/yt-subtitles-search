@@ -1,10 +1,16 @@
-from yt_dlp import YoutubeDL, DownloadError
 import multiprocessing
-from os import path, listdir
-from bs4 import BeautifulSoup
+from os import listdir, path
 
+from bs4 import BeautifulSoup
+from yt_dlp import DownloadError, YoutubeDL
+
+# playlist "Эффективность"
 url = 'https://www.youtube.com/playlist?list=PLa2WHSYysn_EV0SHkXiB2TRLi-31x8Pcy'
-query = 'жак'
+query = 'робот'
+# Творчество, воображение, оригинальность - Жак Фреско [Цикл лекций]
+url = 'https://www.youtube.com/watch?v=l0WtRwYNVb0'
+query = 'крыша'
+
 directory = path.dirname(__file__)
 download_dir = f'{directory}/downloads'
 ydl_opts = {
@@ -17,10 +23,10 @@ ydl_opts = {
 }
 
 
-def subtitles_download(video_info):
+def subtitles_download(info):
     try:
         with YoutubeDL(ydl_opts) as ydl:
-            ydl.download(video_info['url'])
+            ydl.download(info['url'])
     except DownloadError:
         print(f'❌ DonwloadError')
         return
@@ -42,12 +48,18 @@ def search_query(query: str):
 
 def main():
     with YoutubeDL({"extract_flat": True, "skip_download": True}) as ydl:
-        videos_info = ydl.extract_info(url=url, download=False)['entries']
+        videos_info = ydl.extract_info(url=url, download=False)
+        try:
+            videos_info = videos_info['entries']
+            # with multiprocessing.Pool(multiprocessing.cpu_count()) as process:
+            with multiprocessing.Pool(16) as process:
+                process.map(subtitles_download, videos_info)
+        except KeyError:
+            videos_info = ydl.extract_info(url=url, download=False)
+            videos_info['url'] = videos_info['original_url']
+            subtitles_download(videos_info)
 
-    with multiprocessing.Pool(multiprocessing.cpu_count()) as process:
-        process.map(subtitles_download, videos_info)
-
-    search_query(query)
+        search_query(query)
 
 
 if __name__ == "__main__":
