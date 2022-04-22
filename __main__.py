@@ -50,6 +50,7 @@ def search_query(queries: list[str] | str):
     count = 0
     result = defaultdict(list)
     for query in queries:
+        query_lower = query.lower()
         for file in files:
             yt_link = f'https://youtu.be/{file.split(".")[0]}'
 
@@ -57,7 +58,7 @@ def search_query(queries: list[str] | str):
                 soup = BeautifulSoup(f, "lxml")
                 paragraphes = soup.find_all("p")
                 for paragraph in paragraphes:
-                    if paragraph.get_text().find(query) != -1:
+                    if paragraph.get_text().find(query_lower) != -1:
                         result[query].append(
                             f'{yt_link}?t={paragraph.get("t")}ms'
                         )
