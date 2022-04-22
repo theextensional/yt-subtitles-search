@@ -58,7 +58,7 @@ pip install -r requirements.txt
 
 ### Параметр `-h` или `--help`
 
-`--help` - выводит описание с доступных командам и параметров.
+`--help` - выводит описание доступных команд и параметров.
 
 ```sh
 /bin/python /path/to/yt-subtitles -h
