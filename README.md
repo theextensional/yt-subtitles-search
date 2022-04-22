@@ -36,7 +36,7 @@ brew install pipenv
 
 ### Установка зависимостей
 
-#### Установка из Pipfile, если он есть и если установлен Pipenv
+#### Установка из `Pipfile`, если он есть и если установлен Pipenv
 
 ```sh
 pipenv install
