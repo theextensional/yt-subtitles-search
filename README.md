@@ -6,6 +6,13 @@
 
 ## Подготовка
 
+### Windows 10
+Установить Linux на Windows с помощью WSL (https://learn.microsoft.com/ru-ru/windows/wsl/install), например: 
+```PowerShell
+wsl --install -d Debian
+```
+
+
 ### Клонировать/создать репозиторий проекта
 
 ```sh
