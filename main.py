@@ -55,7 +55,7 @@ def search_query(queries: list[str] | str):
             yt_link = f'https://youtu.be/{file.split(".")[0]}'
 
             with open(f"{DOWNLOAD_DIR}/{file}", encoding="utf-8") as f:
-                soup = BeautifulSoup(f, "lxml")
+                soup = BeautifulSoup(f, "xml")
                 paragraphes = soup.find_all("p")
                 for paragraph in paragraphes:
                     if paragraph.get_text().find(query_lower) != -1:
