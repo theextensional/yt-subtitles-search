@@ -59,9 +59,7 @@ def search_query(queries: list[str] | str):
                 paragraphes = soup.find_all("p")
                 for paragraph in paragraphes:
                     if paragraph.get_text().find(query_lower) != -1:
-                        result[query].append(
-                            f'{yt_link}?t={paragraph.get("t")}ms'
-                        )
+                        result[query].append(f'{yt_link}?t={paragraph.get("t")}ms')
                         count += 1
 
     return result, count
@@ -131,9 +129,7 @@ def main(argv):
     CLI = argparse.ArgumentParser()
     CLI.add_argument("url", help="Search URL")
     CLI.add_argument("query", nargs="+", help="Search query")
-    CLI.add_argument(
-        "-o", "--open", action="store_true", help="Open result file"
-    )
+    CLI.add_argument("-o", "--open", action="store_true", help="Open result file")
 
     if len(argv) == 1:
         print("\nError! You must specify at least one option.\n")
@@ -149,7 +145,7 @@ def main(argv):
         result_output(result, count, args.url, open=args.open)
 
 
-if "__main__" == __name__:
+if __name__ == "__main__":
     import sys
 
     main(sys.argv)
