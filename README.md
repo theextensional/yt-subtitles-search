@@ -9,7 +9,7 @@
 ### Клонировать/создать репозиторий проекта
 
 ```sh
-git clone https://github.com/redboo/yt-subtitles.git
+git clone https://github.com/TVP-Support/yt-subtitles.git
 ```
 
 ```sh
