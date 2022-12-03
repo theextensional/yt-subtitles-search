@@ -2,14 +2,17 @@
 # *_* coding: utf-8 *_*
 
 """
-yt-subtitles - консольная программа для поиска по субтитрам YouTube видео.
+Console program for searching query in YouTube video subtitles.
 """
 
+import argparse
 import logging
 import multiprocessing
+import os
 import shutil
+import subprocess
+import sys
 from collections import defaultdict
-from os import listdir, path, system
 
 from bs4 import BeautifulSoup
 from yt_dlp import DownloadError, YoutubeDL
@@ -18,7 +21,7 @@ logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.ERROR)
 
 PRINT_LINES = 10
 
-DIRECTORY = path.dirname(__file__)
+DIRECTORY = os.path.dirname(__file__)
 DOWNLOAD_DIR = f"{DIRECTORY}/downloads"
 
 
@@ -44,7 +47,7 @@ def search_query(queries: list[str] | str):
     if isinstance(queries, str):
         queries = [queries]
 
-    files = listdir(DOWNLOAD_DIR)
+    files = os.listdir(DOWNLOAD_DIR)
 
     result = {}
     count = 0
@@ -105,7 +108,11 @@ def write_result(result: dict, count: int, url: str):
 
 
 def open_resultfile(file):
-    system(f"xdg-open {file}")
+    if sys.platform == "win32":
+        os.startfile(file)
+    else:
+        opener = "open" if sys.platform == "darwin" else "xdg-open"
+        subprocess.call([opener, file])
 
 
 def result_output(result: dict, count: int, url: str, open: bool = False):
@@ -123,9 +130,7 @@ def clear_tmp():
     shutil.rmtree(DOWNLOAD_DIR, ignore_errors=True)
 
 
-def main(argv):
-    import argparse
-
+def search(argv):
     CLI = argparse.ArgumentParser()
     CLI.add_argument("url", help="Search URL")
     CLI.add_argument("query", nargs="+", help="Search query")
@@ -143,9 +148,3 @@ def main(argv):
         get_videos_info(args.url)
         result, count = search_query(args.query)
         result_output(result, count, args.url, open=args.open)
-
-
-if __name__ == "__main__":
-    import sys
-
-    main(sys.argv)
