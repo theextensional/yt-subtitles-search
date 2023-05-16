@@ -1,6 +1,6 @@
-# yt-subtitles
+# Поиск текста по субтитрам YouTube
 
-**yt-subtitles** - консольная программа для поиска по субтитрам YouTube видео.
+**yt-subtitles-search** - консольная программа для поиска по субтитрам YouTube видео.
 
 ![Example](./example.png)
 
@@ -9,11 +9,11 @@
 ### Клонирование/создание репозитория проекта
 
 ```sh
-git clone https://github.com/TVP-Support/yt-subtitles.git
+git clone https://github.com/TVP-Support/yt-subtitles-search.git
 ```
 
 ```sh
-cd yt-subtitles
+cd yt-subtitles-search
 ```
 
 ### Установка зависимостей
@@ -25,25 +25,25 @@ pip install -r requirements.txt
 ## Использование
 
 ```sh
-/bin/python /path/to/yt-subtitles <URL> <QUERY|QUERIES>
+python main.py <URL> <QUERY|QUERIES>
 ```
 
 Пример:
 
 ```sh
-/bin/python /path/to/yt-subtitles https://www.youtube.com/channel/UCrV_cFYbUwpjSOPVJOjTufg Жак
+python main.py 'https://www.youtube.com/channel/UCrV_cFYbUwpjSOPVJOjTufg' 'вода'
 ```
 
-Пример с несколькими запросами:
+Пример с несколькими словами:
 
 ```sh
-/bin/python /path/to/yt-subtitles https://www.youtube.com/channel/UCrV_cFYbUwpjSOPVJOjTufg Жак Вода
+python main.py 'https://www.youtube.com/channel/UCrV_cFYbUwpjSOPVJOjTufg' 'вентилятор с'
 ```
 
 ### Параметр `-h` или `--help`  выводит описание доступных команд и параметров
 
 ```sh
-/bin/python /path/to/yt-subtitles -h
+python main.py -h
 ```
 
 ### Параметр `-o` или `--open`  открывает файл с сохраненными результатами после окончания работы скрипта
