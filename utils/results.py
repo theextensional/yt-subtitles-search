@@ -34,8 +34,7 @@ def print_results(
     header = f"По запросу `{' '.join(query)}` найдено {count}:"
     print(header)
     for video_id, matches in result.items():
-        for timestamp in matches:
-            lines.append(format_video_url(video_id, timestamp))
+        lines.extend(format_video_url(video_id, timestamp) for timestamp in matches)
     for i, line in enumerate(lines[:per_page], start=1):
         print(f"{i:2}. {line}")
     if count > per_page:
