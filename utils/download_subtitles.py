@@ -10,6 +10,11 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from constants import DOWNLOAD_DIR  # noqa
 
 
+class VideoDataError(Exception):
+    def __init__(self, message: str = "Произошла ошибка при получении данных о видео.") -> None:
+        super().__init__(message)
+
+
 def download_subtitle(ydl: YoutubeDL, video_url: str, subtitle_file: str) -> bool:
     """
     Загружает субтитры для заданного видео из `video_url` и сохраняет их в
@@ -51,7 +56,7 @@ def download_subtitles(video_url: str, lang: str = "ru", subtitle_format: str = 
     >>> download_subtitles('https://www.youtube.com/playlist?list=PLa2WHSYysn_FcroL3WX5hFh-BiwBvUMwn')
     ['/downloads/Om7sRzxksXs.ru.json3', '/downloads/0IdiKy6tAbw.ru.json3', ...]
     """
-    subtitle_files = []
+    subtitle_files: list[str] = []
     try:
         url_type, video_url, url_data = parse_youtube_url(video_url)
     except ValueError as e:
@@ -84,7 +89,7 @@ def download_subtitles(video_url: str, lang: str = "ru", subtitle_format: str = 
         else:
             video_info = ydl.extract_info(video_url, download=False)
             if not video_info:
-                raise Exception("Не удалось получить данные о видео.")
+                raise VideoDataError()
 
             if url_type in ["user_name", "channel_url", "channel_name", "channel_id"]:
                 for page in video_info.get("entries", []):
@@ -95,7 +100,7 @@ def download_subtitles(video_url: str, lang: str = "ru", subtitle_format: str = 
                 for playlist in video_info.get("entries", []):
                     playlist_info = ydl.extract_info(playlist["url"], download=False)
                     if not playlist_info:
-                        raise Exception("Не удалось получить данные о видео.")
+                        raise VideoDataError()
                     process_entry(playlist_info.get("entries", []))
 
         return subtitle_files
