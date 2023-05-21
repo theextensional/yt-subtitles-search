@@ -1,9 +1,11 @@
 import json
 import os
 
+from custom_types import Matches
 
-def search_in_json(files_list: list[str], search_list: list[str]) -> tuple[int, dict[str, list[int]]]:
-    matches = {}
+
+def search_in_json(files_list: list[str], search_list: list[str]) -> tuple[int, Matches]:
+    matches: Matches = {}
     count = 0
 
     if not search_list or not files_list:

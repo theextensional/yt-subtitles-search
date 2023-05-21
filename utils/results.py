@@ -4,6 +4,7 @@ import sys
 from datetime import datetime
 
 from constants import RESULT_DIR
+from custom_types import Matches
 
 
 def format_video_url(video_id: str, timestamp: int) -> str:
@@ -28,9 +29,13 @@ def open_file_path(file_path: str) -> None:
 
 
 def print_results(
-    query: list[str], count: int, result: dict[str, list[int]], open_file: bool = False, per_page: int = 10
+    query: list[str],
+    count: int,
+    result: Matches,
+    open_file: bool = False,
+    per_page: int = 10,
 ) -> None:
-    lines = []
+    lines: list[str] = []
     header = f"По запросу `{' '.join(query)}` найдено {count}:"
     print(header)
     for video_id, matches in result.items():
