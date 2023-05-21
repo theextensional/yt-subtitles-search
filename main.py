@@ -21,7 +21,11 @@ if __name__ == "__main__":
     parser.add_argument("query", type=str, help="String to search for in subtitles.")
     parser.add_argument("--lang", type=str, default="ru", help="Language of subtitles (default: ru).")
     parser.add_argument(
-        "--open", "-o", dest="open_file", action="store_true", help="Open result file (default: False)."
+        "--open",
+        "-o",
+        dest="open_file",
+        action="store_true",
+        help="Open result file (default: False).",
     )
     args = parser.parse_args()
 
