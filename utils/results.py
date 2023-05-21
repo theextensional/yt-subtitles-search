@@ -28,9 +28,13 @@ def open_file_path(file_path: str) -> None:
 
 
 def print_results(
-    query: list[str], count: int, result: dict[str, list[int]], open_file: bool = False, per_page: int = 10
+    query: list[str],
+    count: int,
+    result: dict[str, list[int]],
+    open_file: bool = False,
+    per_page: int = 10,
 ) -> None:
-    lines = []
+    lines: list[str] = []
     header = f"По запросу `{' '.join(query)}` найдено {count}:"
     print(header)
     for video_id, matches in result.items():
